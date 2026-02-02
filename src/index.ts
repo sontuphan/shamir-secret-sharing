@@ -222,6 +222,7 @@ export async function split(
   secret: Uint8Array,
   shares: number,
   threshold: number,
+  xCoordinates = newCoordinates(),
 ): Promise<Uint8Array[]> {
   // secret must be a non-empty Uint8Array
   AssertArgument.instanceOf(secret, Uint8Array, 'secret must be a Uint8Array');
@@ -240,7 +241,6 @@ export async function split(
 
   const result: Uint8Array[] = [];
   const secretLength = secret.byteLength;
-  const xCoordinates = newCoordinates();
 
   for (let i = 0; i < shares; i++) {
     const share = new Uint8Array(secretLength + 1);
