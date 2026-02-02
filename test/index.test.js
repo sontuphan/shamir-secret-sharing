@@ -1,7 +1,12 @@
 const {split, combine, merge} = require('../');
+const {getRandomBytes} = require('../csprng');
 
 describe('shamir-secret-sharing', () => {
-  const secret = new Uint8Array([0x73, 0x65, 0x63, 0x72, 0x65, 0x74]);
+  let secret = new Uint8Array([0x73, 0x65, 0x63, 0x72, 0x65, 0x74]);
+
+  beforeEach(() => {
+    secret = getRandomBytes(32);
+  });
 
   it('cannot split with invalid arguments', async () => {
     const secretWrongType = split([0x73, 0x65, 0x63, 0x72, 0x65, 0x74], 3, 2);
