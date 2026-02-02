@@ -330,3 +330,26 @@ export async function combine(shares: Uint8Array[]): Promise<Uint8Array> {
 
   return secret;
 }
+
+/**
+ * a(x) = s_a + a_1 x + a_2 x^2 + ... + a_{t-1} x^{t-1}
+ * b(x) = s_b + b_1 x + b_2 x^2 + ... + b_{t-1} x^{t-1}
+ * (a+b)(x) = (s_a+s_b) + (a_1+b_1) + (a_2+b_2) x^2 + ... + (a_{t-1}+b_{t-1}) x^{t-1}
+ * where (a_i+b_i) is addition in GF(2^8) (i.e. XOR), and there is no multiplication in merging.
+ * @param aShare
+ * @param bShare
+ */
+export function merge(aShare: Uint8Array, bShare: Uint8Array): Uint8Array {
+  AssertArgument.equalTo(
+    aShare.length,
+    bShare.length,
+    'a and b must have the same length to be mergeable',
+  );
+
+  return Uint8Array.from(
+    aShare.map((a, i) => {
+      if (i === aShare.length - 1) return a;
+      return add(a, bShare[i]);
+    }),
+  );
+}

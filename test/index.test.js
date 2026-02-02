@@ -1,4 +1,4 @@
-const {split, combine} = require('../');
+const {split, combine, merge} = require('../');
 
 describe('shamir-secret-sharing', () => {
   const secret = new Uint8Array([0x73, 0x65, 0x63, 0x72, 0x65, 0x74]);
@@ -136,5 +136,22 @@ describe('shamir-secret-sharing', () => {
         }
       }
     }
+  });
+
+  it('can refresh shares without changing the secret', async () => {
+    const shares = await split(secret, 5, 3);
+    const reconstructed = await combine(shares);
+
+    expect(reconstructed).toEqual(secret);
+
+    const xCoordinates = Uint8Array.from(shares.map((share) => share.at(-1)));
+    const zero = new Uint8Array(secret.length);
+    const patches = await split(zero, 5, 3, xCoordinates);
+
+    const freshShares = shares.map((share, i) => merge(share, patches[i]));
+
+    const freshReconstructed = await combine(freshShares);
+
+    expect(freshReconstructed).toEqual(secret);
   });
 });

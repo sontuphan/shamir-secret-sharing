@@ -5,6 +5,7 @@
     "target": "es2020",
     "module": "commonjs",
     "moduleResolution": "node",
+    "types": ["node"],
     "outDir": ".",
     "noImplicitAny": true,
     "sourceMap": true,
@@ -12,8 +13,8 @@
     "noUnusedLocals": true,
     "baseUrl": ".",
     "paths": {
-      "shamir-secret-sharing/csprng": ["src/csprng"],
-    },
+      "shamir-secret-sharing/csprng": ["src/csprng"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]
